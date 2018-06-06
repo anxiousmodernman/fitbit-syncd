@@ -25,7 +25,7 @@ use std::fs::File;
 use std::io::{Read, Write};
 use std::path::Path;
 
-use bincode::{deserialize, serialize};
+use bincode::{deserialize, serialize, };
 use chrono::NaiveDate;
 use clap::{App, Arg, SubCommand};
 use keyz::Key;
@@ -189,7 +189,7 @@ where
 
 fn fetch_and_store_profile(f: &fitbit::FitbitClient, db: &sled::Tree) -> Result<(), Error> {
     let user_profile = f.get_profile()?;
-    let encoded = serialize(&user_profile, bincode::Infinite)?;
+    let encoded = serialize(&user_profile)?;
     let key = make_key!("/profile");
     db.set(key.0, encoded)
         .map_err(|e| format_err!("db error: {:?}", e))
