@@ -36,7 +36,9 @@ mod config;
 use config::Config;
 mod database;
 use database::TimeSeriesData;
-use fitbit::{Body, DateQuery, Period, User};
+use fitbit::body::Body;
+use fitbit::user::{User, UserProfile};
+use fitbit::query::{Period, DateQuery};
 
 fn main() -> Result<(), Error> {
     let default_dir = Path::new(&env::var("HOME")?).join(".config/fitbit-grabber");
@@ -135,7 +137,7 @@ fn main() -> Result<(), Error> {
             .get(b"/profile")
             .unwrap()
             .expect("profile should be in db");
-        let user_profile: fitbit::UserProfile =
+        let user_profile: UserProfile =
             deserialize(&data).expect("could not deserialize UserProfile");
         println!("{:?}", user_profile);
     }
@@ -188,7 +190,7 @@ where
 }
 
 fn fetch_and_store_profile(f: &fitbit::FitbitClient, db: &sled::Tree) -> Result<(), Error> {
-    let user_profile = f.get_profile()?;
+    let user_profile = f.get_user_profile()?;
     let encoded = serialize(&user_profile)?;
     let key = make_key!("/profile");
     db.set(key.0, encoded)
