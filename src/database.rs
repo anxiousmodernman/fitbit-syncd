@@ -11,7 +11,3 @@ impl TimeSeriesData {
 }
 
 
-//fn from(val: NaiveDate) -> Self {
-//    let dt = Date::<Utc>::from_utc(val, Utc);
-//    Key(dt.and_hms(0, 0, 0).to_rfc3339().as_bytes().to_vec())
-//}
